@@ -6,27 +6,26 @@
 
 ---
 
-## ✨ Key Features
+## 🛠️ System Architecture & Implementation Details
 
-- **📸 Gemini-Powered Vision Extraction:** Upload a receipt image, and Google Gemini extracts structured line items, quantities, unit prices, taxes, and service charges automatically via Pydantic schemas.
-- **👥 Dynamic Member Config:** Set up your dinner party size (from 2 up to 10 members) and customize names upfront before diving into assignments.
-- **🔍 Human-in-the-Loop Review:** Review extracted data with confidence score indicators (`⚠️`). Easily override misread items or typos *before* any arithmetic happens.
-- **⚖️ True Proportional Distribution:** Taxes, service charges, and discounts are distributed strictly proportional to what each individual actually consumed—not divided equally by head count.
-- **🛠️ Receipt Math Discrepancy Reconciliation:** Automatically detects minor rounding or math errors printed by the restaurant and reconciles them smoothly across users.
-- **📲 Group Chat Summary:** Instantly generate a clean text breakdown formatted to copy and paste directly into WhatsApp or group chats.
-
----
-
-## 🚀 Tech Stack
-
-- **Frontend & UI:** Streamlit
-- **AI / OCR Extraction:** Google Gemini API (`gemini-3.6-flash`) with structured JSON outputs
-- **Data Validation & Structure:** Pydantic
-- **Data Processing:** Python, Pandas
+1. **Extraction Pipeline (Live AI):** 
+   - Uses **Google Gemini (`gemini-3.6-flash`)** via the modern `google-genai` SDK.
+   - Enforces strict **Pydantic schema validation** (`ReceiptBill`) to ensure the Vision model returns structured JSON with per-field confidence scores. No data is mocked during extraction.
+2. **Review & Correction Layer (Human-in-the-Loop):**
+   - Automatically flags low-confidence fields (`< 0.8`) with visual warnings (`⚠️`) so users can correct OCR errors *before* any math happens.
+3. **Proportional Distribution Engine (Local Python Math):**
+   - Deterministic backend calculation. Distributes taxes, service charges, and discounts strictly proportional to each member's consumed subtotal ratio.
+   - Handles receipt math discrepancies automatically by reconciling printed totals with line item sums.
 
 ---
 
-## 📦 Installation & Quickstart
+## 🚀 How to Run It Locally
+
+### Prerequisites
+- Python 3.10+ installed on your machine.
+- A free **Google Gemini API Key** from [Google AI Studio](https://aistudio.google.com/).
+
+### Installation Steps
 
 1. **Clone the repository:**
    ```bash
